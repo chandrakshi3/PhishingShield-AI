@@ -1,10 +1,19 @@
 import os
 import tempfile
+import streamlit as st
 from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+
+def get_groq_client():
+    try:
+        api_key = st.secrets["GROQ_API_KEY"]
+    except Exception:
+        api_key = os.environ.get("GROQ_API_KEY", "")
+    return Groq(api_key=api_key)
+
+client = get_groq_client()
 
 SUPPORTED_FORMATS = [".mp3", ".wav", ".m4a", ".mp4", ".ogg", ".webm", ".mpeg", ".mpga"]
 
